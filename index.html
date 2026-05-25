@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Organizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="topbar">
+    <div id="topbar-left">
+      <span id="logo">Market Organizer</span>
+      <button id="btn-new-group" onclick="createGroup()">+ New Group</button>
+      <button id="btn-new-company" onclick="createCompanyNode()">+ Company</button>
+    </div>
+    <div id="topbar-right">
+      <span id="feed-status" class="feed-status feed-off" title="Live feed status">⬤ Connecting…</span>
+      <button id="btn-save" onclick="saveLayout()">Save</button>
+      <button id="btn-load" onclick="openLoadModal()">Load</button>
+      <button id="btn-share" onclick="shareLayout()">Share</button>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="canvas">
+      <!-- SVG layer for connection lines — sits below all windows -->
+      <svg id="connections-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" class="arrow-head"/>
+          </marker>
+          <marker id="arrow-pending" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" class="arrow-head-pending"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <div id="search-panel">
+      <div id="search-header">Stock Search</div>
+      <div id="search-input-wrap">
+        <input id="search-input" type="text" placeholder="Symbol or company name..." autocomplete="off">
+      </div>
+      <div id="search-results"></div>
+    </div>
+  </div>
+
+  <!-- Save code modal -->
+  <div id="modal-overlay" class="hidden" onclick="closeModal(event)">
+    <div id="modal">
+      <div id="modal-title"></div>
+      <textarea id="modal-code" readonly></textarea>
+      <div id="modal-actions">
+        <button onclick="copyCode()">Copy Code</button>
+        <button onclick="closeModalDirect()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load modal -->
+  <div id="load-overlay" class="hidden" onclick="closeLoad(event)">
+    <div id="load-modal">
+      <div id="load-title">Load Layout</div>
+      <textarea id="load-code" placeholder="Paste your save code here..."></textarea>
+      <div id="load-actions">
+        <button onclick="loadFromCode()">Load</button>
+        <button onclick="closeLoadDirect()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection detail modal -->
+  <div id="conn-overlay" class="hidden" onclick="closeConnModal(event)">
+    <div id="conn-modal">
+      <div id="conn-modal-header">
+        <span id="conn-modal-title">Connection Analysis</span>
+        <button id="conn-modal-close" onclick="closeConnModal()">✕</button>
+      </div>
+      <div id="conn-groups-row">
+        <div class="conn-group-card" id="conn-from-card"></div>
+        <div class="conn-arrow-mid">→</div>
+        <div class="conn-group-card" id="conn-to-card"></div>
+      </div>
+      <div id="conn-analysis-box">
+        <div id="conn-analysis-label">AI Analysis</div>
+        <div id="conn-analysis-text"></div>
+      </div>
+      <div id="conn-modal-actions">
+        <button id="conn-reanalyze-btn">Re-analyze</button>
+        <button id="conn-delete-btn" class="btn-danger">Delete Connection</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
